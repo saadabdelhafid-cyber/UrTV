@@ -15,6 +15,7 @@ app's preview of the same page and `measure.sh` writes «not measured»). Times 
 | TCL Smart TV Pro (BeyondTV4) · 9 reports | 11 | works | yes | 5555 | `com.tcl.smartalexa` ships off outside Alexa's regions, expected | 14 min |
 | TCL BeyondTV · 6 reports | 9 and 11 | works | not reported | 5555 | – | not reported |
 | TCL BeyondTV2 | 9 | works | not reported | not reported | – | not reported |
+| SEI Robotics STREAM STR-D2 G4K | 14 | fails (`com.klevico.monet` opens on Home after role assignment and retry) | no, preview only | 5555 | the vendor home intercepts Home; safety switch restores the stock home | not recorded |
 | TCL UnionTV | 9 | works | yes | 5555 | – | 15 min |
 | TCL Smart TV Pro (G08) · 18 reports | 14 | works (launcherx + setupwraith off) | no, preview only | 5555; the first probe may hang, run it again | a Wi-Fi drop during the switch: the safety switch restores the stock home and `optimize/install.sh launcher` retries the switch by itself (once); Play Protect refused the home APK over ADB at first (`install.sh` now turns that check off for the install only and puts it back) | 11 min |
 | TCL Smart TV Pro (G08) | 12 | works | not reported | not reported | SmartTube (about 25 MB) uploaded to 100%, then the install ended in a read timeout on the TV (slow steps now run in the background on the TV; `SKIP_EXTRAS=1` skips the extras) | not reported |

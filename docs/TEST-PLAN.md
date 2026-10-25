@@ -58,7 +58,7 @@ Open: «معاينة الشاشة» row, or `adb shell am start -n sa.urtv.scree
 | ID | Check | Expected |
 |---|---|---|
 | B1 | Overall | Full screen, photo background, no white flash, no scrollbars, no cursor, all text Arabic except show titles and «S&P 500» |
-| B2 | Clock | 12-hour Arabic digits, no two digits touching (e.g. ٤٨), gold colon, small gold ص/م at the **upper left**; centred between the card and the right edge; matches the real Riyadh time |
+| B2 | Clock | 24-hour Arabic digits (00–23), no two digits touching (e.g. ٤٨), gold colon; centred between the card and the right edge; matches the real Riyadh time |
 | B3 | Under clock | «بتوقيت <chosen city>» |
 | B4 | Top right | Hijri date (with هـ) over Gregorian date (Gregorian month name, e.g. أكتوبر) |
 | B5 | Top left (no boxes) | Temperature ° + condition word (or «غبار» in gold); city · high/low; gold line from the left edge; تاسي / S&P 500 / بيتكوين each with ▲ green or ▼ red (or no arrow — never a dash) |

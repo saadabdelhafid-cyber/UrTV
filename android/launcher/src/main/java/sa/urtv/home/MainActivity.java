@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable rotateWallpaper = this::nextWallpaper;
     static final long WALLPAPER_INTERVAL_MS = 10 * 60 * 1000;
-    private TextView greeting, weatherLine, clock, ampm, date, zoneLine, title, appsLabel;
+    private TextView greeting, weatherLine, clock, date, zoneLine, title, appsLabel;
     private Pill wifiPill;   // the network's name shows while it has the focus
     private Greeting greetingLine;
     private int glowColor = 0xFF3A3A3A;
@@ -379,10 +379,7 @@ public class MainActivity extends Activity {
         clockRow.setGravity(Gravity.TOP);
         clock = text(58, "display", 0xFFFFFDF6);
         clock.setIncludeFontPadding(false);
-        ampm = text(16, "medium", GOLD);
-        // the row reads from the right: the time first, then the ص or the م on its left
         clockRow.addView(clock);
-        clockRow.addView(ampm, llp(-2, -2, 0, dp(6), dp(8), 0));
         left.addView(clockRow, llp(-2, -2, 0, dp(-2), 0, 0));
 
         date = text(14, "regular", 0xFFC6BBA4);
@@ -393,7 +390,7 @@ public class MainActivity extends Activity {
         zoneLine.setSingleLine(true);
         zoneLine.setVisibility(View.GONE);
         left.addView(zoneLine, llp(-2, -2, 0, dp(1), dp(4), 0));
-        for (TextView t : new TextView[]{greeting, weatherLine, clock, ampm, date, zoneLine}) t.setShadowLayer(dp(3), 0, dp(1), 0x80000000);
+        for (TextView t : new TextView[]{greeting, weatherLine, clock, date, zoneLine}) t.setShadowLayer(dp(3), 0, dp(1), 0x80000000);
         left.setGravity(Gravity.RIGHT);
         for (TextView t : new TextView[]{greeting, weatherLine, date, zoneLine}) t.setGravity(Gravity.RIGHT);
         header.addView(left, new FrameLayout.LayoutParams(-2, -2, Gravity.RIGHT | Gravity.TOP));
@@ -914,9 +911,8 @@ public class MainActivity extends Activity {
         Calendar now = ClockZone.at(ms, tz);   // the city's time, like the prayer times beside it
         int h = now.get(Calendar.HOUR_OF_DAY);
         greetingLine.update(h, cfg);
-        int hh = h % 12 == 0 ? 12 : h % 12;   // always 12-hour
+        String hh = String.format(Locale.ROOT, "%02d", h);   // 24-hour clock
         clock.setText(arabicDigits(hh + ":" + String.format(Locale.ROOT, "%02d", now.get(Calendar.MINUTE))));
-        ampm.setText(h < 12 ? "ص" : "م");
         boolean other = zone != null && ClockZone.differs(tvTz, tz, ms);
         zoneLine.setVisibility(other ? View.VISIBLE : View.GONE);
         if (other) zoneLine.setText(ClockZone.label(zone[0]));
