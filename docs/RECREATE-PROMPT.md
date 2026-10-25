@@ -21,7 +21,7 @@ One grid with three rows — `grid-template-rows: auto 1fr auto`, stage padding 
 - Right: Hijri date (large, sand `#F6EFE0`) over the Gregorian date (smaller, muted `#C6BBA4`), then a short gold hairline starting at the right screen edge and fading toward the middle.
 
 **Middle row — card left, clock centred in the space between the card and the right edge:**
-- Clock `font-size: clamp(120px, min(17vw, 31vh), 345px)` (≈300px tall), `line-height .92`. 12-hour always, Arabic-Indic digits, gold colon, and a small gold `ص`/`م` at `.28em` at the upper left of the time. Under it a tiny muted line `بتوقيت الرياض`.
+- Clock `font-size: clamp(120px, min(17vw, 31vh), 345px)` (≈300px tall), `line-height .92`. 24-hour, zero-padded Arabic-Indic digits, gold colon. Under it a tiny muted line `بتوقيت الرياض`.
   - Browsers ignore `letter-spacing` on Arabic script, digits included, and the display font's `٤` reaches into the next digit: put every digit in its own inline box with a `.09em` margin between boxes.
 - The card on the left: translucent panel (`rgba(4,14,9,.46)`, 1px gold border, radius 12, backdrop blur), width `min(760px, 48vw)`. Its content is a setting (`#panel=`): new episodes (below, the default), today's prayer times (next one gold, past ones dim), a 5-day forecast, every followed team's games this week, a verse one day and a hadith the next, or no card.
   - Header `هذا الأسبوع` with a gold rule fading out to the left.

@@ -155,10 +155,6 @@
   .clock .sep{
     font-size:.46em;align-self:center;transform:translateY(-.08em);color:var(--gold);opacity:.9;padding:0 .1em;
   }
-  .clock .ampm{
-    font-size:.28em;font-weight:500;color:var(--gold);
-    align-self:flex-start;margin-top:.12em;margin-inline-end:.25em;
-  }
   .subline{
     margin-top:1.4vh;display:flex;align-items:center;gap:.7em;
     font-size:clamp(12px,1.02vw,20px);font-weight:300;letter-spacing:.3em;color:#D8CDB6;
@@ -282,7 +278,7 @@
   <section class="mid">
     <div class="clockwrap">
       <div class="clock">
-        <span class="ampm" id="ck-ap">—</span><span class="d" id="ck-h">--</span><span class="sep">:</span><span class="d" id="ck-m">--</span>
+        <span class="d" id="ck-h">--</span><span class="sep">:</span><span class="d" id="ck-m">--</span>
       </div>
       <div class="subline"><span class="dot"></span><span id="clock-sub">بتوقيت الرياض</span></div>
     </div>
@@ -372,22 +368,19 @@ function riyadhParts(d = new Date()){
   }).formatToParts(d).reduce((a,p)=>(a[p.type]=p.value,a),{});
   return { y:+f.year, mo:+f.month, d:+f.day, h:(+f.hour)%24, mi:+f.minute, s:+f.second };
 }
-function fmt12(h, mi){
-  const h12 = h % 12 === 0 ? 12 : h % 12;
-  return `${ar(h12)}:${ar(pad(mi))} ${h < 12 ? 'ص' : 'م'}`;
+function fmt24(h, mi){
+  return `${ar(pad(h % 24))}:${ar(pad(mi))}`;
 }
 
 function tickClock(){
   const p = riyadhParts();
-  const h12 = p.h % 12 === 0 ? 12 : p.h % 12;
   // one box per digit: browsers ignore letter-spacing on Arabic digits, and ٤ reaches into the next digit
   const digits = s => [...s].map(ch => '<i>' + ch + '</i>').join('');
-  const key = h12 + ':' + p.mi;
+  const key = p.h + ':' + p.mi;
   if(key === tickClock.last) return;   // ticks every second, redraws once a minute
   tickClock.last = key;
-  document.getElementById('ck-h').innerHTML = digits(ar(h12));
+  document.getElementById('ck-h').innerHTML = digits(ar(pad(p.h)));
   document.getElementById('ck-m').innerHTML = digits(ar(pad(p.mi)));
-  document.getElementById('ck-ap').textContent = p.h < 12 ? 'ص' : 'م';
 }
 
 function tickDates(){
@@ -525,7 +518,7 @@ function tickPrayer(){
     panel.classList.add('now');
     elL.textContent = 'حان الآن';
     elN.textContent = prayerName(cur);
-    elT.textContent = fmt12(cur.h, cur.mi);
+    elT.textContent = fmt24(cur.h, cur.mi);
     elC.innerHTML = 'الإقامة بعد <b>' + humanRemaining(Math.max(60, Math.ceil(left)*60)) + '</b>';
     return;
   }
@@ -537,7 +530,7 @@ function tickPrayer(){
                      : (PRAYERS[0].h*60 + PRAYERS[0].mi) + 1440 - mins;
   if(!next) next = PRAYERS[0];
   elN.textContent = prayerName(next);
-  elT.textContent = fmt12(next.h, next.mi);
+  elT.textContent = fmt24(next.h, next.mi);
   elC.innerHTML = 'بعد <b>' + humanRemaining(Math.max(0, Math.round(leftM*60))) + '</b>';
 }
 
@@ -756,9 +749,9 @@ function matchSlot(id, now, shown){
   shown.add(ev.idEvent);
   const p = new Intl.DateTimeFormat('en-GB',{timeZone:CONFIG.timezone,hour:'2-digit',minute:'2-digit',hour12:false})
     .formatToParts(d).reduce((a,x)=>(a[x.type]=x.value,a),{});
-  const t12 = ar(fmt12(+p.hour % 24, +p.minute));
+  const t24 = fmt24(+p.hour % 24, +p.minute);
   const live = diff <= 0 && ev.intHomeScore != null && ev.intAwayScore != null;
-  const sub = diff > 0 ? `بعد ${shortRemaining(diff)} · ${t12}` : `<span class="live">مباشر</span> · ${liveStatus(ev, t12)}`;
+  const sub = diff > 0 ? `بعد ${shortRemaining(diff)} · ${t24}` : `<span class="live">مباشر</span> · ${liveStatus(ev, t24)}`;
   const mid = live ? ` <span class="sc">${ar(+ev.intHomeScore)} - ${ar(+ev.intAwayScore)}</span> ` : ' × ';
   return `<div class="mblock">`
        + `<div class="big"><span>${home}${mid}${away}</span></div>`
@@ -766,12 +759,12 @@ function matchSlot(id, now, shown){
        + `</div>`;
 }
 
-function liveStatus(ev, t12){
+function liveStatus(ev, t24){
   const st = (ev.strStatus || '').toUpperCase();
   if(st === 'HT') return 'استراحة';
   if(['FT','AET','PEN'].includes(st)) return 'انتهت';
   const m = parseInt(ev.strProgress, 10);
-  return isNaN(m) ? `بدأت ${t12}` : `الدقيقة ${ar(m)}`;
+  return isNaN(m) ? `بدأت ${t24}` : `الدقيقة ${ar(m)}`;
 }
 
 // while a picked team is playing, refresh that event every 2 minutes
@@ -1014,7 +1007,7 @@ function prayerRows(){
     const at = h * 60 + mi;
     let cls = at < now ? 'past' : '';
     if(at >= now && !next){ next = k; cls = 'next'; }
-    return `<li class="${cls}"><span>${names[k]}</span><span class="dt">${fmt12(h, mi)}</span></li>`;
+    return `<li class="${cls}"><span>${names[k]}</span><span class="dt">${fmt24(h, mi)}</span></li>`;
   });
 }
 
@@ -1050,7 +1043,7 @@ function matchRows(){
       const when = finishedRecently(ev, now) ? 'انتهت'
         : now >= t ? '<span class="live">مباشر</span>'
         : (new Intl.DateTimeFormat('en-CA', {timeZone:CONFIG.timezone}).format(d) === today ? 'اليوم' : day(d))
-          + ' ' + fmt12(+p.hour % 24, +p.minute);
+          + ' ' + fmt24(+p.hour % 24, +p.minute);
       return `<li><span>${esc(teamAr(ev.strHomeTeam, ev.idHomeTeam))}${mid}${esc(teamAr(ev.strAwayTeam, ev.idAwayTeam))}</span><span class="dt">${when}</span></li>`;
     });
 }

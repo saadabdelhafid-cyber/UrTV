@@ -11,6 +11,7 @@ app's preview of the same page and `measure.sh` writes «not measured»). Times 
 | TCL Smart TV Pro G08 | 14 | works (launcherx + setupwraith off) | no, preview only | 5555; the first probe may hang, run it again | a Wi-Fi drop during the switch: the safety switch restores the stock home and `optimize/install.sh launcher` retries the switch by itself (once) | 11 min |
 | TCL Smart TV Pro G05, G07, BeyondTV4 | 11 | works | yes | 5555 | `com.tcl.smartalexa` ships off outside Alexa's regions, expected | 14 min |
 | TCL UnionTV | 9 | works | yes | 5555 | – | 15 min |
+| SEI Robotics STREAM STR-D2 G4K | 14 | fails (`com.klevico.monet` opens on Home after role assignment and retry) | no, preview only | 5555 | the vendor home intercepts Home; safety switch restores the stock home | not recorded |
 | Skyworth SWTV-20AE-PRO | 11 | works (tvlauncher off) | no | 5555, an occasional timeout that retries by itself | – | 14 min |
 | Skyworth SWTV-24AE-4K | 14 | works | no | port 5555 closed: pair once through Wireless debugging, then `adb tcpip 5555`; the port disappears after every reboot | reconnect after each restart; APK uploads slow | 39 min |
 | Xiaomi MiTV-MOOR2 | 11 | works | no | 5555 | screenshots may fail | 17 min |
